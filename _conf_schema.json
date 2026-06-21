@@ -92,15 +92,29 @@
     "hint": "\u9ed8\u8ba4\u6a21\u677f\u4f1a\u8981\u6c42 LLM \u53ea\u8fd4\u56de\u82f1\u6587 NovelAI \u6807\u7b7e\u3002\u4f60\u53ef\u4ee5\u4fee\u6539\uff0c\u4f46\u5fc5\u987b\u4fdd\u7559 {prompt} \u5360\u4f4d\u7b26\u3002",
     "default": "Translate the following NovelAI image prompt tags into concise English tags. Keep existing English tags, weights, brackets, braces, commas, and tag order. Return only the translated prompt, with no explanation:\n{prompt}"
   },
-  "negative_prompt": {
-    "description": "\u9ed8\u8ba4\u8d1f\u9762\u63d0\u793a\u8bcd",
-    "type": "text",
-    "default": "nsfw, lowres, {bad}, error, fewer, extra, missing, worst quality, jpeg artifacts, bad quality, watermark, unfinished, displeasing, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract]"
+  "quality_tags_enabled": {
+    "description": "\u8ffd\u52a0\u9ed8\u8ba4\u8d28\u91cf\u6807\u7b7e",
+    "type": "bool",
+    "hint": "\u5bf9\u5e94 NovelAI \u7f51\u9875\u7684 Quality Tags Enabled\u3002\u5f00\u542f\u540e\u4f1a\u628a base_prompt \u8ffd\u52a0\u5230\u7528\u6237 prompt \u540e\u9762\uff1b\u4ee3\u7801\u4f1a\u4fdd\u6301 qualityToggle=false\uff0c\u907f\u514d API \u518d\u8ffd\u52a0\u4e00\u4efd\u5b98\u65b9\u8d28\u91cf\u8bcd\u3002",
+    "default": true
   },
   "base_prompt": {
-    "description": "\u9ed8\u8ba4\u8ffd\u52a0\u6b63\u5411\u63d0\u793a\u8bcd",
+    "description": "\u9ed8\u8ba4\u8ffd\u52a0\u6b63\u5411\u8d28\u91cf\u6807\u7b7e",
     "type": "text",
+    "hint": "quality_tags_enabled \u5f00\u542f\u65f6\u8ffd\u52a0\u5230 prompt \u672b\u5c3e\u3002",
     "default": "best quality, amazing quality, very aesthetic, absurdres"
+  },
+  "uc_preset_enabled": {
+    "description": "\u8ffd\u52a0\u9ed8\u8ba4 UC \u8d1f\u9762\u8bcd",
+    "type": "bool",
+    "hint": "\u5bf9\u5e94 NovelAI \u7f51\u9875\u7684 UC Preset Enabled\u3002\u5f00\u542f\u540e\u4f1a\u628a negative_prompt \u8ffd\u52a0\u5230\u8d1f\u9762\u8bcd\u91cc\uff1b\u4ee3\u7801\u4f1a\u4fdd\u6301 ucPreset=2\uff0c\u907f\u514d API \u518d\u8ffd\u52a0\u4e00\u4efd\u5b98\u65b9 UC\u3002",
+    "default": true
+  },
+  "negative_prompt": {
+    "description": "\u9ed8\u8ba4 UC \u8d1f\u9762\u8bcd",
+    "type": "text",
+    "hint": "uc_preset_enabled \u5f00\u542f\u65f6\u8ffd\u52a0\u5230\u8d1f\u9762\u8bcd\u4e2d\u3002",
+    "default": "nsfw, lowres, {bad}, error, fewer, extra, missing, worst quality, jpeg artifacts, bad quality, watermark, unfinished, displeasing, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract]"
   },
   "timeout_seconds": {
     "description": "\u8bf7\u6c42\u8d85\u65f6\u65f6\u95f4\uff08\u79d2\uff09",

@@ -81,6 +81,23 @@ class NovelAIPluginTests(unittest.TestCase):
         self.assertEqual(config.width, 768)
         self.assertEqual(config.height, 1216)
         self.assertEqual(config.model, "nai-diffusion-3")
+        self.assertTrue(config.quality_tags_enabled)
+        self.assertTrue(config.uc_preset_enabled)
+
+    def test_quality_and_uc_preset_switches(self):
+        request = parse_generation_request(
+            '1girl -u "bad hands"',
+            GenerationConfig(quality_tags_enabled=False, uc_preset_enabled=False),
+        )
+
+        self.assertEqual(request.prompt, "1girl")
+        self.assertEqual(request.negative_prompt, "bad hands")
+
+    def test_override_skips_default_quality_and_uc(self):
+        request = parse_generation_request('1girl -u "bad hands" -O', GenerationConfig())
+
+        self.assertEqual(request.prompt, "1girl")
+        self.assertEqual(request.negative_prompt, "bad hands")
 
     def test_invalid_size_is_rejected(self):
         with self.assertRaisesRegex(NovelAIPluginError, "64"):

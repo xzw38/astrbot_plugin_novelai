@@ -34,8 +34,8 @@ imagine 1girl, cat ears, blue eyes
 /nai draw 1girl -u "bad hands, extra fingers"
 /nai draw 1girl -O
 /nai draw 1girl -S -d -D
-/nai draw 一个女孩，猫耳，蓝眼睛
-/nai draw 一个女孩，猫耳 -T
+/nai draw "anime girl, cat ears, blue eyes"
+/nai draw "anime girl, cat ears" -T
 /nai draw 1girl -i 2 -b 3 -o verbose
 ```
 
@@ -48,7 +48,7 @@ imagine 1girl, cat ears, blue eyes
 - `--model` / `-m`: model or alias such as `nai-v3`, `nai-v4-full`.
 - `--scheduler` / `-C`: NovelAI scheduler.
 - `--negative`, `--undesired`, `-u`: negative prompt.
-- `--override` / `-O`: do not append configured base and negative prompts.
+- `--override` / `-O`: do not append configured base prompt or default UC.
 - `--no-translator` / `-T`: skip LLM prompt translation once.
 - `--strength` / `-N`: img2img strength.
 - `--noise` / `-n`: img2img noise.
@@ -57,6 +57,26 @@ imagine 1girl, cat ears, blue eyes
 - `--batch` / `-b`: images per round.
 - `--output` / `-o`: `minimal`, `default`, or `verbose`.
 - `--smea` / `-S`, `--smea-dyn` / `-d`, `--decrisper` / `-D`: NovelAI advanced toggles.
+
+## Quality Tags and UC
+
+By default the plugin appends both:
+
+- `base_prompt`: positive quality tags appended to the end of the prompt.
+- `negative_prompt`: default UC / undesired content tags appended to the negative prompt.
+
+This follows `koishijs/novelai-bot`: the NovelAI API payload keeps `qualityToggle=false` and `ucPreset=2`, then the plugin appends configurable tags itself. This avoids NovelAI adding another hidden copy of quality/UC presets.
+
+In settings:
+
+- `quality_tags_enabled`: similar to NovelAI Web's "Quality Tags Enabled".
+- `uc_preset_enabled`: similar to NovelAI Web's "UC Preset Enabled".
+
+Use `-O` for one request when you want full control without default prompt or UC appends:
+
+```text
+/nai draw 1girl -u "bad hands" -O
+```
 
 ## Batch and Output Mode
 
@@ -112,7 +132,7 @@ You can edit this template in plugin settings, but keep `{prompt}`.
 Use `-T` when one request should keep the original prompt:
 
 ```text
-/nai draw 一个女孩，猫耳 -T
+/nai draw "一个女孩，猫耳" -T
 ```
 
 ## Koishi Reference

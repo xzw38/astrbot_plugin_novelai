@@ -167,7 +167,9 @@ class GenerationConfig:
         "Keep existing English tags, weights, brackets, braces, commas, and tag order. "
         "Return only the translated prompt, with no explanation:\n{prompt}"
     )
+    quality_tags_enabled: bool = True
     negative_prompt: str = DEFAULT_NEGATIVE_PROMPT
+    uc_preset_enabled: bool = True
     base_prompt: str = DEFAULT_BASE_PROMPT
     timeout_seconds: int = 120
     image_steps: int = 50
@@ -232,7 +234,9 @@ def load_generation_config(config: dict[str, Any] | None) -> GenerationConfig:
                 "Return only the translated prompt, with no explanation:\n{prompt}",
             )
         ),
+        quality_tags_enabled=as_bool(config.get("quality_tags_enabled", True)),
         negative_prompt=str(config.get("negative_prompt", DEFAULT_NEGATIVE_PROMPT)).strip(),
+        uc_preset_enabled=as_bool(config.get("uc_preset_enabled", True)),
         base_prompt=str(config.get("base_prompt", DEFAULT_BASE_PROMPT)).strip(),
         timeout_seconds=int(config.get("timeout_seconds", 120)),
         image_steps=int(config.get("image_steps", 50)),
@@ -297,8 +301,10 @@ def parse_generation_request(raw_args: str, config: GenerationConfig) -> Generat
         prompt = normalize_prompt(prompt)
         negative_prompt = normalize_prompt(str(namespace.negative))
     else:
-        prompt = join_prompt(normalize_prompt(prompt), normalize_prompt(config.base_prompt))
-        negative_prompt = join_prompt(normalize_prompt(str(namespace.negative)), normalize_prompt(config.negative_prompt))
+        base_prompt = normalize_prompt(config.base_prompt) if config.quality_tags_enabled else ""
+        uc_preset = normalize_prompt(config.negative_prompt) if config.uc_preset_enabled else ""
+        prompt = join_prompt(normalize_prompt(prompt), base_prompt)
+        negative_prompt = join_prompt(normalize_prompt(str(namespace.negative)), uc_preset)
 
     seed = namespace.seed
     if seed is None:

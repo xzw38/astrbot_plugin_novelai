@@ -126,6 +126,9 @@ imagine 1girl, cinematic lighting
 /nai draw 1girl -b 4
 /nai draw 1girl -i 2 -b 3 -o verbose</pre>
       <p><code>-o minimal</code> &#21482;&#21457;&#22270;&#65307;<code>-o default</code> &#21457; seed &#21644;&#22270;&#65307;<code>-o verbose</code> &#21457;&#23436;&#25972;&#21442;&#25968;&#21644;&#22270;&#12290;</p>
+      <h2>&#36136;&#37327;&#26631;&#31614;&#21644; UC</h2>
+      <p>&#40664;&#35748;&#20250;&#36861;&#21152; <code>base_prompt</code> &#21644; <code>negative_prompt</code>&#12290;<code>quality_tags_enabled</code> &#23545;&#24212; NovelAI &#32593;&#39029;&#30340; Quality Tags Enabled&#65307;<code>uc_preset_enabled</code> &#23545;&#24212; UC Preset Enabled&#12290;</p>
+      <p>&#26412;&#25554;&#20214;&#21442;&#32771; koishijs/novelai-bot&#65306;API &#37324;&#20445;&#25345; <code>qualityToggle=false</code> &#21644; <code>ucPreset=2</code>&#65292;&#28982;&#21518;&#30001;&#25554;&#20214;&#33258;&#24049;&#36861;&#21152;&#21487;&#37197;&#32622;&#30340;&#27491;&#21521;&#36136;&#37327;&#35789;&#21644; UC&#65292;&#36991;&#20813;&#38544;&#34255;&#37325;&#22797;&#36861;&#21152;&#12290;&#21333;&#27425;&#21629;&#20196;&#29992; <code>-O</code> &#21487;&#20197;&#19981;&#36861;&#21152;&#40664;&#35748;&#35789;&#12290;</p>
       <h2>&#33258;&#21160;&#32763;&#35793;</h2>
       <p>&#24320;&#21551; <code>auto_translate_prompt</code> &#21518;&#65292;&#21253;&#21547;&#20013;&#25991;&#30340; prompt &#20250;&#20808;&#20132;&#32473; AstrBot &#24403;&#21069;&#25509;&#20837;&#30340; LLM &#32763;&#35793;&#25104;&#33521;&#25991;&#26631;&#31614;&#12290;&#22914;&#26524;&#27809;&#29983;&#25928;&#65292;&#35831;&#25226;&#24179;&#21488;&#26085;&#24535;&#20999;&#21040; debug&#65292;&#26597;&#30475; <code>NovelAI auto-translate</code> &#24320;&#22836;&#30340;&#26085;&#24535;&#12290;</p>
       <pre>Translate the following NovelAI image prompt tags into concise English tags. Keep existing English tags, weights, brackets, braces, commas, and tag order. Return only the translated prompt, with no explanation:
@@ -175,6 +178,9 @@ imagine 1girl, cinematic lighting</pre>
 /nai draw 1girl -b 4
 /nai draw 1girl -i 2 -b 3 -o verbose</pre>
       <p><code>minimal</code> sends image only. <code>default</code> sends seed and image. <code>verbose</code> sends full parameters and image.</p>
+      <h2>Quality Tags and UC</h2>
+      <p>By default the plugin appends <code>base_prompt</code> and <code>negative_prompt</code>. <code>quality_tags_enabled</code> is similar to NovelAI Web's Quality Tags Enabled, and <code>uc_preset_enabled</code> is similar to UC Preset Enabled.</p>
+      <p>Following koishijs/novelai-bot, the API payload keeps <code>qualityToggle=false</code> and <code>ucPreset=2</code>, then the plugin appends configurable quality tags and UC itself. Use <code>-O</code> once to skip default appends.</p>
       <h2>Auto Translation</h2>
       <p>Enable <code>auto_translate_prompt</code> to translate prompts containing Chinese characters through the configured AstrBot LLM provider. If it does not work, enable debug logging and look for logs beginning with <code>NovelAI auto-translate</code>.</p>
       <pre>Translate the following NovelAI image prompt tags into concise English tags. Keep existing English tags, weights, brackets, braces, commas, and tag order. Return only the translated prompt, with no explanation:
