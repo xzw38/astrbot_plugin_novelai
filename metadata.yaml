@@ -1,10 +1,10 @@
 name: astrbot_plugin_novelai
 display_name: NovelAI 图片生成
-desc: 通过 NovelAI API 为 AstrBot 提供文生图能力。
-short_desc: NovelAI 文生图插件。
-version: 0.1.0
-author: codex
-repo: ""
+desc: 通过 NovelAI API 为 AstrBot 提供画图、改图、增强和自动翻译能力。
+short_desc: NovelAI 画图插件。
+version: 0.2.0
+author: xzw38
+repo: https://github.com/xzw38/astrbot_plugin_novelai
 astrbot_version: ">=4.16.0"
 support_platforms:
   - aiocqhttp
