@@ -95,14 +95,15 @@ class NovelAIPluginTests(unittest.TestCase):
         self.assertEqual(request.width, 1024)
         self.assertEqual(request.height, 1024)
         self.assertEqual(request.model, "nai-diffusion-3")
-        self.assertEqual(request.sampler, "k_euler_a")
+        self.assertEqual(request.sampler, "k_euler_ancestral")
 
     def test_payload_uses_nai3_shape(self):
         request = parse_generation_request("1girl -m nai-v3 -s k_euler_a -C karras", GenerationConfig())
         payload = build_novelai_payload(request)
 
         self.assertEqual(payload["parameters"]["params_version"], 3)
-        self.assertEqual(payload["parameters"]["noise_schedule"], "native")
+        self.assertEqual(payload["parameters"]["noise_schedule"], "karras")
+        self.assertEqual(payload["parameters"]["sampler"], "k_euler_ancestral")
         self.assertEqual(payload["parameters"]["ucPreset"], 2)
         self.assertFalse(payload["parameters"]["qualityToggle"])
 

@@ -87,7 +87,7 @@ DEFAULT_NEGATIVE_PROMPT = (
 DEFAULT_BASE_PROMPT = "best quality, amazing quality, very aesthetic, absurdres"
 DEFAULT_ENDPOINT = "https://image.novelai.net"
 DEFAULT_MODEL = "nai-diffusion-3"
-DEFAULT_SAMPLER = "k_euler_a"
+DEFAULT_SAMPLER = "k_euler_ancestral"
 DEFAULT_SCHEDULER = "native"
 MAX_STEPS = 50
 MAX_RESOLUTION = 1920
@@ -108,10 +108,10 @@ ORIENT_MAP = {
     "square": {"width": 1024, "height": 1024},
 }
 
-NAI_SAMPLERS = {"k_euler_a", "k_euler", "k_lms", "ddim", "plms"}
+NAI_SAMPLERS = {"k_euler_ancestral", "k_euler", "k_lms", "ddim", "plms"}
 NAI3_SAMPLERS = {
     "k_euler",
-    "k_euler_a",
+    "k_euler_ancestral",
     "k_dpmpp_2s_ancestral",
     "k_dpmpp_2m",
     "k_dpmpp_sde",
@@ -119,7 +119,7 @@ NAI3_SAMPLERS = {
 }
 NAI4_SAMPLERS = {
     "k_euler",
-    "k_euler_a",
+    "k_euler_ancestral",
     "k_dpmpp_2s_ancestral",
     "k_dpmpp_2m_sde",
     "k_dpmpp_2m",
@@ -347,8 +347,8 @@ def resolve_model(model: str) -> str:
 
 
 def sd2nai_sampler(sampler: str, model: str) -> str:
-    if sampler == "k_euler_ancestral":
-        return "k_euler_a"
+    if sampler == "k_euler_a":
+        return "k_euler_ancestral"
     if model == "nai-diffusion-3" and sampler in NAI3_SAMPLERS:
         return sampler
     if model in {"nai-diffusion-4-curated-preview", "nai-diffusion-4-full"} and sampler in NAI4_SAMPLERS:

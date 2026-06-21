@@ -27,7 +27,8 @@
   "sampler": {
     "description": "\u9ed8\u8ba4\u91c7\u6837\u5668",
     "type": "string",
-    "default": "k_euler_a"
+    "hint": "\u53ef\u586b k_euler_a\uff0c\u63d2\u4ef6\u4f1a\u81ea\u52a8\u8f6c\u6210 NovelAI API \u4f7f\u7528\u7684 k_euler_ancestral\u3002",
+    "default": "k_euler_ancestral"
   },
   "scheduler": {
     "description": "\u9ed8\u8ba4\u8c03\u5ea6\u5668",
