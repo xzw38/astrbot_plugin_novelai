@@ -15,7 +15,8 @@
   "endpoint": {
     "description": "NovelAI API \u5730\u5740",
     "type": "string",
-    "default": "https://api.novelai.net"
+    "hint": "\u56fe\u7247\u751f\u6210\u63a8\u8350\u4f7f\u7528 https://image.novelai.net\u3002",
+    "default": "https://image.novelai.net"
   },
   "model": {
     "description": "\u9ed8\u8ba4\u6a21\u578b",

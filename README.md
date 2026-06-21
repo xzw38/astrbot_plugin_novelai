@@ -7,8 +7,9 @@ NovelAI image generation plugin for AstrBot.
 1. Put this repository at `data/plugins/astrbot_plugin_novelai`.
 2. Reload plugins in AstrBot WebUI.
 3. Configure `auth_token`. Paste only the token value, without `Bearer `.
-4. Open plugin Pages -> `usage` for the built-in Chinese guide.
-5. Dependencies are installed automatically on plugin load. If pip is unavailable, run:
+4. Keep `endpoint` as `https://image.novelai.net` unless you know you need a custom endpoint.
+5. Open plugin Pages -> `usage` for the built-in Chinese guide.
+6. Dependencies are installed automatically on plugin load. If pip is unavailable, run:
 
 ```bash
 pip install -r data/plugins/astrbot_plugin_novelai/requirements.txt
