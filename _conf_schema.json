@@ -1,0 +1,146 @@
+{
+  "usage_page": {
+    "description": "\u4f7f\u7528\u8bf4\u660e",
+    "type": "string",
+    "hint": "\u5728\u63d2\u4ef6\u8be6\u60c5\u7684 Pages \u4e2d\u6253\u5f00 usage\uff0c\u53ef\u4ee5\u67e5\u770b\u547d\u4ee4\u793a\u4f8b\u3001\u53c2\u6570\u548c\u81ea\u52a8\u7ffb\u8bd1\u8bf4\u660e\u3002",
+    "default": "\u8bf7\u67e5\u770b\u63d2\u4ef6\u9875\u9762\uff1ausage"
+  },
+  "auth_token": {
+    "description": "NovelAI \u6388\u6743 Token",
+    "type": "string",
+    "hint": "\u53ea\u586b token \u672c\u4f53\uff0c\u4e0d\u8981\u5e26 Bearer \u524d\u7f00\u3002",
+    "obvious_hint": true,
+    "default": ""
+  },
+  "endpoint": {
+    "description": "NovelAI API \u5730\u5740",
+    "type": "string",
+    "default": "https://api.novelai.net"
+  },
+  "model": {
+    "description": "\u9ed8\u8ba4\u6a21\u578b",
+    "type": "string",
+    "hint": "\u652f\u6301\u77ed\u522b\u540d\uff1anai-v3\u3001nai-v4-full\u3001nai-v4-curated-preview\u3002",
+    "default": "nai-v3"
+  },
+  "sampler": {
+    "description": "\u9ed8\u8ba4\u91c7\u6837\u5668",
+    "type": "string",
+    "default": "k_euler_a"
+  },
+  "scheduler": {
+    "description": "\u9ed8\u8ba4\u8c03\u5ea6\u5668",
+    "type": "string",
+    "hint": "NovelAI v3 \u5e38\u7528 native\uff1bNovelAI v4 \u53ef\u7528 karras\u3001exponential\u3001polyexponential\u3002",
+    "default": "native"
+  },
+  "width": {
+    "description": "\u9ed8\u8ba4\u56fe\u7247\u5bbd\u5ea6",
+    "type": "int",
+    "hint": "\u5fc5\u987b\u662f 64 \u7684\u500d\u6570\u3002",
+    "default": 832
+  },
+  "height": {
+    "description": "\u9ed8\u8ba4\u56fe\u7247\u9ad8\u5ea6",
+    "type": "int",
+    "hint": "\u5fc5\u987b\u662f 64 \u7684\u500d\u6570\u3002",
+    "default": 1216
+  },
+  "steps": {
+    "description": "\u9ed8\u8ba4\u751f\u6210\u6b65\u6570",
+    "type": "int",
+    "hint": "\u63d2\u4ef6\u9650\u5236\u4e3a 1 \u5230 50\u3002",
+    "default": 28
+  },
+  "scale": {
+    "description": "\u9ed8\u8ba4\u63d0\u793a\u8bcd\u5f15\u5bfc\u5f3a\u5ea6",
+    "type": "float",
+    "default": 5.0
+  },
+  "cfg_rescale": {
+    "description": "NovelAI v4 CFG Rescale",
+    "type": "float",
+    "hint": "v4 \u7684\u8f93\u5165\u670d\u4ece\u5ea6\u8c03\u6574\uff0c\u9ed8\u8ba4 0\u3002",
+    "default": 0.0
+  },
+  "smea": {
+    "description": "\u9ed8\u8ba4\u542f\u7528 SMEA",
+    "type": "bool",
+    "default": false
+  },
+  "smea_dyn": {
+    "description": "\u9ed8\u8ba4\u542f\u7528 SMEA DYN",
+    "type": "bool",
+    "default": false
+  },
+  "decrisper": {
+    "description": "\u9ed8\u8ba4\u542f\u7528 Decrisper",
+    "type": "bool",
+    "default": false
+  },
+  "auto_translate_prompt": {
+    "description": "\u81ea\u52a8\u7ffb\u8bd1\u4e2d\u6587 Prompt",
+    "type": "bool",
+    "hint": "\u5f00\u542f\u540e\uff0c\u542b\u6709\u4e2d\u6587\u7684 prompt \u4f1a\u5148\u4ea4\u7ed9 AstrBot \u5f53\u524d\u63a5\u5165\u7684 LLM \u7ffb\u8bd1\uff0c\u518d\u53d1\u7ed9 NovelAI\u3002\u5355\u6b21\u547d\u4ee4\u53ef\u7528 -T \u8df3\u8fc7\u7ffb\u8bd1\u3002",
+    "default": false
+  },
+  "translation_prompt": {
+    "description": "\u81ea\u52a8\u7ffb\u8bd1\u6a21\u677f",
+    "type": "text",
+    "hint": "\u9ed8\u8ba4\u6a21\u677f\u4f1a\u8981\u6c42 LLM \u53ea\u8fd4\u56de\u82f1\u6587 NovelAI \u6807\u7b7e\u3002\u4f60\u53ef\u4ee5\u4fee\u6539\uff0c\u4f46\u5fc5\u987b\u4fdd\u7559 {prompt} \u5360\u4f4d\u7b26\u3002",
+    "default": "Translate the following NovelAI image prompt tags into concise English tags. Keep existing English tags, weights, brackets, braces, commas, and tag order. Return only the translated prompt, with no explanation:\n{prompt}"
+  },
+  "negative_prompt": {
+    "description": "\u9ed8\u8ba4\u8d1f\u9762\u63d0\u793a\u8bcd",
+    "type": "text",
+    "default": "nsfw, lowres, {bad}, error, fewer, extra, missing, worst quality, jpeg artifacts, bad quality, watermark, unfinished, displeasing, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract]"
+  },
+  "base_prompt": {
+    "description": "\u9ed8\u8ba4\u8ffd\u52a0\u6b63\u5411\u63d0\u793a\u8bcd",
+    "type": "text",
+    "default": "best quality, amazing quality, very aesthetic, absurdres"
+  },
+  "timeout_seconds": {
+    "description": "\u8bf7\u6c42\u8d85\u65f6\u65f6\u95f4\uff08\u79d2\uff09",
+    "type": "int",
+    "default": 120
+  },
+  "image_steps": {
+    "description": "\u9ed8\u8ba4\u6539\u56fe\u6b65\u6570",
+    "type": "int",
+    "hint": "img2img \u65f6\u4f7f\u7528\uff0c\u547d\u4ee4\u91cc\u7528 -t \u53ef\u4e34\u65f6\u8986\u76d6\u3002",
+    "default": 50
+  },
+  "strength": {
+    "description": "\u9ed8\u8ba4\u6539\u56fe\u5e45\u5ea6",
+    "type": "float",
+    "hint": "img2img strength\uff0c\u8d8a\u5927\u6539\u52a8\u8d8a\u660e\u663e\u3002",
+    "default": 0.7
+  },
+  "noise": {
+    "description": "\u9ed8\u8ba4\u6539\u56fe\u566a\u58f0",
+    "type": "float",
+    "default": 0.2
+  },
+  "output_mode": {
+    "description": "\u9ed8\u8ba4\u8f93\u51fa\u6a21\u5f0f",
+    "type": "string",
+    "hint": "minimal \u53ea\u53d1\u56fe\uff1bdefault \u53d1 seed+\u56fe\uff1bverbose \u53d1\u5b8c\u6574\u53c2\u6570+\u56fe\u3002",
+    "default": "default"
+  },
+  "max_iterations": {
+    "description": "\u6700\u5927\u751f\u6210\u8f6e\u6570",
+    "type": "int",
+    "default": 4
+  },
+  "max_batch": {
+    "description": "\u6bcf\u8f6e\u6700\u5927\u5f20\u6570",
+    "type": "int",
+    "default": 4
+  },
+  "max_total_images": {
+    "description": "\u5355\u6b21\u547d\u4ee4\u6700\u5927\u603b\u5f20\u6570",
+    "type": "int",
+    "default": 8
+  }
+}
