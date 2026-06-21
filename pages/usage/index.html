@@ -19,7 +19,6 @@
     }
 
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       background: var(--paper);
@@ -27,65 +26,27 @@
       font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
       line-height: 1.6;
     }
-
-    main {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 34px 22px 56px;
-    }
-
-    header {
-      border-bottom: 2px solid var(--line);
-      padding-bottom: 22px;
-      margin-bottom: 26px;
-    }
-
-    h1 {
-      margin: 0 0 8px;
-      font-size: clamp(30px, 5vw, 52px);
-      line-height: 1.05;
-      letter-spacing: 0;
-    }
-
-    h2 {
-      margin: 30px 0 12px;
-      font-size: 22px;
-      letter-spacing: 0;
-    }
-
-    p {
-      margin: 0 0 12px;
+    main { max-width: 980px; margin: 0 auto; padding: 34px 22px 56px; }
+    header { border-bottom: 2px solid var(--line); padding-bottom: 22px; margin-bottom: 26px; }
+    .topbar { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+    h1 { margin: 0 0 8px; font-size: clamp(30px, 5vw, 52px); line-height: 1.05; letter-spacing: 0; }
+    h2 { margin: 30px 0 12px; font-size: 22px; letter-spacing: 0; }
+    p { margin: 0 0 12px; color: var(--muted); }
+    .lede { max-width: 780px; font-size: 16px; }
+    .lang-switch { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--panel); flex: 0 0 auto; }
+    .lang-switch button {
+      border: 0;
+      background: transparent;
       color: var(--muted);
+      padding: 8px 12px;
+      cursor: pointer;
+      font: inherit;
     }
-
-    .lede {
-      max-width: 780px;
-      font-size: 16px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 14px;
-    }
-
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 16px;
-    }
-
-    .card strong {
-      display: block;
-      margin-bottom: 6px;
-      color: var(--ink);
-    }
-
-    code, pre {
-      font-family: Consolas, "Cascadia Mono", monospace;
-    }
-
+    .lang-switch button.active { background: var(--accent); color: white; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .card strong { display: block; margin-bottom: 6px; color: var(--ink); }
+    code, pre { font-family: Consolas, "Cascadia Mono", monospace; }
     pre {
       overflow-x: auto;
       margin: 10px 0 0;
@@ -97,43 +58,19 @@
       white-space: pre-wrap;
       word-break: break-word;
     }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    th, td {
-      padding: 11px 12px;
-      border-bottom: 1px solid var(--line);
-      text-align: left;
-      vertical-align: top;
-    }
-
-    th {
-      width: 185px;
-      color: var(--accent);
-      font-weight: 700;
-      background: #eef8f8;
-    }
-
-    tr:last-child th,
-    tr:last-child td { border-bottom: 0; }
-
-    .note {
-      border-left: 4px solid var(--accent-2);
-      background: #fff7f4;
-      padding: 12px 14px;
-      color: #593024;
-      border-radius: 0 8px 8px 0;
-    }
-
+    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+    th, td { padding: 11px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { width: 185px; color: var(--accent); font-weight: 700; background: #eef8f8; }
+    tr:last-child th, tr:last-child td { border-bottom: 0; }
+    .note { border-left: 4px solid var(--accent-2); background: #fff7f4; padding: 12px 14px; color: #593024; border-radius: 0 8px 8px 0; }
+    [data-lang-panel="en"] { display: none; }
+    body.lang-en [data-lang-panel="zh"] { display: none; }
+    body.lang-en [data-lang-panel="en"] { display: block; }
+    body.lang-en [data-lang-panel="en"].grid { display: grid; }
     @media (max-width: 640px) {
       main { padding: 24px 14px 42px; }
+      .topbar { display: block; }
+      .lang-switch { width: fit-content; margin-bottom: 16px; }
       th, td { display: block; width: 100%; }
       th { border-bottom: 0; }
     }
@@ -141,91 +78,137 @@
 </head>
 <body>
   <main>
-    <header>
-      <h1>&#78;&#111;&#118;&#101;&#108;&#65;&#73; &#22270;&#29255;&#29983;&#25104;</h1>
-      <p class="lede">&#65;&#115;&#116;&#114;&#66;&#111;&#116; &#25554;&#20214;&#20351;&#29992;&#35828;&#26126;&#12290;&#37197;&#32622; auth token &#21518;&#65292;&#22312;&#32842;&#22825;&#37324;&#21457;&#36865;&#25351;&#20196;&#21363;&#21487;&#35843;&#29992; NovelAI &#23448;&#26041;&#22270;&#29255;&#25509;&#21475;&#12290;</p>
-    </header>
+    <div class="topbar">
+      <div>
+        <header data-lang-panel="zh">
+          <h1>NovelAI &#22270;&#29255;&#29983;&#25104;</h1>
+          <p class="lede">AstrBot &#25554;&#20214;&#20351;&#29992;&#35828;&#26126;&#12290;&#40664;&#35748;&#20013;&#25991;&#65292;&#21487;&#20197;&#20999;&#25442;&#33521;&#25991;&#12290;</p>
+        </header>
+        <header data-lang-panel="en">
+          <h1>NovelAI Image Generation</h1>
+          <p class="lede">Usage guide for the AstrBot NovelAI plugin. Chinese is shown by default; switch to English when needed.</p>
+        </header>
+      </div>
+      <div class="lang-switch" aria-label="Language">
+        <button type="button" id="langZh" class="active">中文</button>
+        <button type="button" id="langEn">English</button>
+      </div>
+    </div>
 
-    <section class="grid" aria-label="quick start">
-      <div class="card">
-        <strong>1. &#37197;&#32622; token</strong>
-        <p>&#22312;&#25554;&#20214;&#35774;&#32622;&#37324;&#22635;&#20889; <code>auth_token</code>&#12290;&#21482;&#22635; token &#26412;&#20307;&#65292;&#19981;&#35201;&#24102; <code>Bearer</code>&#12290;</p>
-      </div>
-      <div class="card">
-        <strong>2. &#21457;&#36865;&#25351;&#20196;</strong>
-        <p>&#25512;&#33616;&#20351;&#29992; <code>/nai draw</code>&#65292;&#20063;&#25903;&#25345; <code>/novelai</code>&#12289;<code>imagine</code> &#21644; <code>&#32422;&#31295;</code>&#12290;</p>
-      </div>
-      <div class="card">
-        <strong>3. &#31561;&#24453;&#22238;&#22270;</strong>
-        <p>&#25554;&#20214;&#20250;&#25552;&#21462; NovelAI &#36820;&#22238; zip &#20013;&#30340;&#31532;&#19968;&#24352;&#22270;&#29255;&#65292;&#24182;&#21457;&#36865;&#22238;&#24403;&#21069;&#20250;&#35805;&#12290;</p>
-      </div>
-    </section>
-
-    <h2>&#24120;&#29992;&#21629;&#20196;</h2>
-    <pre>/nai help
+    <section data-lang-panel="zh">
+      <section class="grid" aria-label="quick start">
+        <div class="card"><strong>1. &#37197;&#32622; token</strong><p>&#22312;&#25554;&#20214;&#35774;&#32622;&#37324;&#22635;&#20889; <code>auth_token</code>&#65292;&#21482;&#22635; token &#26412;&#20307;&#65292;&#19981;&#35201;&#24102; <code>Bearer</code>&#12290;</p></div>
+        <div class="card"><strong>2. &#26816;&#26597; endpoint</strong><p>&#25512;&#33616;&#20445;&#25345; <code>https://image.novelai.net</code>&#12290;</p></div>
+        <div class="card"><strong>3. &#21457;&#36865;&#25351;&#20196;</strong><p>&#25512;&#33616; <code>/nai draw</code>&#65292;&#20063;&#25903;&#25345; <code>/novelai</code>&#12289;<code>imagine</code> &#21644; <code>&#32422;&#31295;</code>&#12290;</p></div>
+      </section>
+      <h2>&#24120;&#29992;&#21629;&#20196;</h2>
+      <pre>/nai help
 /nai draw 1girl, cat ears, blue eyes
 /nai 1girl, cat ears, blue eyes
 /novelai 1girl, white dress, garden
 imagine 1girl, cinematic lighting
 &#32422;&#31295; 1girl, cat ears, blue eyes</pre>
-
-    <h2>&#21442;&#25968;&#31034;&#20363;</h2>
-    <pre>/nai draw 1girl -r square -m nai-v3 -s k_euler_a -C native
+      <h2>&#21442;&#25968;&#31034;&#20363;</h2>
+      <pre>/nai draw 1girl -r square -m nai-v3 -s k_euler_a -C native
 /nai draw 1girl --width 1024 --height 1024 -t 32 -c 5.5 -x 123
 /nai draw 1girl -u "bad hands, extra fingers"
-/nai draw 1girl -O
-/nai draw 1girl -S -d -D
 /nai draw &#19968;&#20010;&#22899;&#23401;&#65292;&#29483;&#32819;&#65292;&#34013;&#30524;&#30555;
 /nai draw &#19968;&#20010;&#22899;&#23401;&#65292;&#29483;&#32819; -T
 /nai draw 1girl -i 2 -b 3 -o verbose</pre>
-
-    <h2>&#25913;&#22270;&#21644;&#22686;&#24378;</h2>
-    <p>&#28040;&#24687;&#37324;&#24102;&#22270;&#29255;&#26102;&#65292;&#25554;&#20214;&#20250;&#33258;&#21160;&#36208; img2img&#12290;&#29992; <code>-N</code> &#25511;&#21046;&#25913;&#22270;&#24133;&#24230;&#65292;&#29992; <code>-n</code> &#25511;&#21046;&#22122;&#22768;&#12290;</p>
-    <pre>/nai draw 1girl, new clothes -N 0.7 -n 0.2
-/nai img 1girl, different hairstyle</pre>
-    <p>&#22686;&#24378;&#27169;&#24335;&#21442;&#32771; koishijs/novelai-bot&#65306;&#38656;&#35201;&#21457;&#36865;&#19968;&#24352;&#23485;&#39640;&#20043;&#21644;&#20026; <code>1280</code> &#30340; NovelAI &#29983;&#25104;&#22270;&#65292;&#36755;&#20986;&#20250;&#25918;&#22823;&#21040; 1.5 &#20493;&#12290;</p>
-    <pre>/nai enhance masterpiece
+      <h2>&#25913;&#22270;&#21644;&#22686;&#24378;</h2>
+      <p>&#28040;&#24687;&#37324;&#24102;&#22270;&#29255;&#26102;&#65292;&#25554;&#20214;&#20250;&#33258;&#21160;&#36208; img2img&#12290;<code>-N</code> &#25511;&#21046;&#25913;&#22270;&#24133;&#24230;&#65292;<code>-n</code> &#25511;&#21046;&#22122;&#22768;&#12290;</p>
+      <pre>/nai draw 1girl, new clothes -N 0.7 -n 0.2
+/nai img 1girl, different hairstyle
+/nai enhance masterpiece
 /nai draw masterpiece -e</pre>
-
-    <h2>&#25209;&#37327;&#21644;&#36755;&#20986;&#27169;&#24335;</h2>
-    <p><code>-i</code> &#26159;&#29983;&#25104;&#36718;&#25968;&#65292;<code>-b</code> &#26159;&#27599;&#36718;&#24352;&#25968;&#12290;&#21333;&#27425;&#21629;&#20196;&#24635;&#24352;&#25968;&#20250;&#21463;&#35774;&#32622;&#37324;&#30340; <code>max_total_images</code> &#38480;&#21046;&#12290;</p>
-    <pre>/nai draw 1girl -i 3
+      <h2>&#25209;&#37327;&#21644;&#36755;&#20986;&#27169;&#24335;</h2>
+      <pre>/nai draw 1girl -i 3
 /nai draw 1girl -b 4
 /nai draw 1girl -i 2 -b 3 -o verbose</pre>
-    <p><code>-o minimal</code> &#21482;&#21457;&#22270;&#65307;<code>-o default</code> &#21457; seed &#21644;&#22270;&#65307;<code>-o verbose</code> &#21457;&#23436;&#25972;&#21442;&#25968;&#21644;&#22270;&#12290;</p>
-
-    <h2>&#21442;&#25968;&#34920;</h2>
-    <table>
-      <tbody>
-        <tr><th><code>-r</code></th><td><code>portrait</code>&#12289;<code>landscape</code>&#12289;<code>square</code> &#25110; <code>1024x1024</code>&#12290;</td></tr>
-        <tr><th><code>-m</code></th><td>&#27169;&#22411;&#25110;&#21035;&#21517;&#65292;&#20363;&#22914; <code>nai-v3</code>&#12289;<code>nai-v4-full</code>&#12290;</td></tr>
-        <tr><th><code>-s</code></th><td>&#37319;&#26679;&#22120;&#65292;&#20363;&#22914; <code>k_euler_a</code>&#12289;<code>k_euler</code>&#12289;<code>k_dpmpp_2m</code>&#12290;</td></tr>
-        <tr><th><code>-x</code></th><td>seed&#65292;&#33539;&#22260;&#20026; <code>0</code> &#21040; <code>4294967295</code>&#12290;</td></tr>
-        <tr><th><code>-t</code></th><td>steps&#65292;&#26412;&#25554;&#20214;&#38480;&#21046;&#20026; <code>1</code> &#21040; <code>50</code>&#12290;</td></tr>
-        <tr><th><code>-c</code></th><td>scale&#65292;&#25552;&#31034;&#35789;&#24341;&#23548;&#24378;&#24230;&#12290;</td></tr>
+      <p><code>-o minimal</code> &#21482;&#21457;&#22270;&#65307;<code>-o default</code> &#21457; seed &#21644;&#22270;&#65307;<code>-o verbose</code> &#21457;&#23436;&#25972;&#21442;&#25968;&#21644;&#22270;&#12290;</p>
+      <h2>&#33258;&#21160;&#32763;&#35793;</h2>
+      <p>&#24320;&#21551; <code>auto_translate_prompt</code> &#21518;&#65292;&#21253;&#21547;&#20013;&#25991;&#30340; prompt &#20250;&#20808;&#20132;&#32473; AstrBot &#24403;&#21069;&#25509;&#20837;&#30340; LLM &#32763;&#35793;&#25104;&#33521;&#25991;&#26631;&#31614;&#12290;&#22914;&#26524;&#27809;&#29983;&#25928;&#65292;&#35831;&#25226;&#24179;&#21488;&#26085;&#24535;&#20999;&#21040; debug&#65292;&#26597;&#30475; <code>NovelAI auto-translate</code> &#24320;&#22836;&#30340;&#26085;&#24535;&#12290;</p>
+      <pre>Translate the following NovelAI image prompt tags into concise English tags. Keep existing English tags, weights, brackets, braces, commas, and tag order. Return only the translated prompt, with no explanation:
+{prompt}</pre>
+      <h2>&#21442;&#25968;&#34920;</h2>
+      <table><tbody>
+        <tr><th><code>-r</code></th><td>&#23610;&#23544;&#65306;<code>portrait</code>&#12289;<code>landscape</code>&#12289;<code>square</code> &#25110; <code>1024x1024</code>&#12290;</td></tr>
+        <tr><th><code>-m</code></th><td>&#27169;&#22411;&#65306;<code>nai-v3</code>&#12289;<code>nai-v4-full</code> &#31561;&#12290;</td></tr>
+        <tr><th><code>-s</code></th><td>&#37319;&#26679;&#22120;&#65306;<code>k_euler_a</code> &#20250;&#33258;&#21160;&#36716;&#25104; <code>k_euler_ancestral</code>&#12290;</td></tr>
         <tr><th><code>-u</code></th><td>&#36127;&#38754;&#25552;&#31034;&#35789;&#65292;&#31561;&#21516; <code>--negative</code> &#25110; <code>--undesired</code>&#12290;</td></tr>
-        <tr><th><code>-O</code></th><td>&#35206;&#30422;&#27169;&#24335;&#65292;&#19981;&#33258;&#21160;&#36861;&#21152;&#40664;&#35748;&#25552;&#31034;&#35789;&#12290;</td></tr>
-        <tr><th><code>-T</code></th><td>&#26412;&#27425;&#35831;&#27714;&#36339;&#36807; LLM &#33258;&#21160;&#32763;&#35793;&#12290;</td></tr>
-        <tr><th><code>-N</code></th><td>&#25913;&#22270;&#24133;&#24230; strength&#65292;&#36234;&#22823;&#25913;&#21160;&#36234;&#26126;&#26174;&#12290;</td></tr>
+        <tr><th><code>-O</code></th><td>&#19981;&#33258;&#21160;&#36861;&#21152;&#40664;&#35748;&#25552;&#31034;&#35789;&#12290;</td></tr>
+        <tr><th><code>-T</code></th><td>&#26412;&#27425;&#35831;&#27714;&#36339;&#36807;&#33258;&#21160;&#32763;&#35793;&#12290;</td></tr>
+        <tr><th><code>-N</code></th><td>&#25913;&#22270;&#24133;&#24230; strength&#12290;</td></tr>
         <tr><th><code>-n</code></th><td>&#25913;&#22270;&#22122;&#22768; noise&#12290;</td></tr>
-        <tr><th><code>-e</code></th><td>&#22686;&#24378;&#27169;&#24335;&#65292;&#31561;&#21516; <code>/nai enhance</code>&#12290;</td></tr>
+        <tr><th><code>-e</code></th><td>&#22686;&#24378;&#27169;&#24335;&#12290;</td></tr>
         <tr><th><code>-i</code></th><td>&#29983;&#25104;&#36718;&#25968; iterations&#12290;</td></tr>
         <tr><th><code>-b</code></th><td>&#27599;&#36718;&#24352;&#25968; batch&#12290;</td></tr>
         <tr><th><code>-o</code></th><td>&#36755;&#20986;&#27169;&#24335;&#65306;<code>minimal</code>&#12289;<code>default</code>&#12289;<code>verbose</code>&#12290;</td></tr>
-      </tbody>
-    </table>
+      </tbody></table>
+      <p class="note">&#24403;&#21069;&#25903;&#25345; NovelAI &#23448;&#26041; token&#12289;text2img&#12289;img2img&#12289;enhance&#12289;&#25209;&#37327;&#29983;&#25104;&#21644;&#33258;&#21160;&#32763;&#35793;&#12290;</p>
+    </section>
 
-    <h2>&#33258;&#21160;&#32763;&#35793;</h2>
-    <p>&#24320;&#21551; <code>auto_translate_prompt</code> &#21518;&#65292;&#21253;&#21547;&#20013;&#25991;&#30340; prompt &#20250;&#20808;&#20132;&#32473; AstrBot &#24403;&#21069;&#25509;&#20837;&#30340; LLM &#32763;&#35793;&#25104;&#33521;&#25991;&#26631;&#31614;&#65292;&#20877;&#21457;&#36865;&#32473; NovelAI&#12290;</p>
-    <pre>Translate the following NovelAI image prompt tags into concise English tags. Keep existing English tags, weights, brackets, braces, commas, and tag order. Return only the translated prompt, with no explanation:
+    <section data-lang-panel="en">
+      <section class="grid" aria-label="quick start">
+        <div class="card"><strong>1. Configure token</strong><p>Set <code>auth_token</code> in plugin settings. Paste only the token value, without <code>Bearer</code>.</p></div>
+        <div class="card"><strong>2. Check endpoint</strong><p>Recommended endpoint: <code>https://image.novelai.net</code>.</p></div>
+        <div class="card"><strong>3. Send commands</strong><p>Use <code>/nai draw</code>, <code>/novelai</code>, <code>imagine</code>, or <code>约稿</code>.</p></div>
+      </section>
+      <h2>Commands</h2>
+      <pre>/nai help
+/nai draw 1girl, cat ears, blue eyes
+/nai 1girl, cat ears, blue eyes
+/novelai 1girl, white dress, garden
+imagine 1girl, cinematic lighting</pre>
+      <h2>Examples</h2>
+      <pre>/nai draw 1girl -r square -m nai-v3 -s k_euler_a -C native
+/nai draw 1girl --width 1024 --height 1024 -t 32 -c 5.5 -x 123
+/nai draw 1girl -u "bad hands, extra fingers"
+/nai draw 1girl -i 2 -b 3 -o verbose</pre>
+      <h2>Image-to-Image and Enhance</h2>
+      <pre>/nai draw 1girl, new clothes -N 0.7 -n 0.2
+/nai img 1girl, different hairstyle
+/nai enhance masterpiece
+/nai draw masterpiece -e</pre>
+      <h2>Batch and Output</h2>
+      <pre>/nai draw 1girl -i 3
+/nai draw 1girl -b 4
+/nai draw 1girl -i 2 -b 3 -o verbose</pre>
+      <p><code>minimal</code> sends image only. <code>default</code> sends seed and image. <code>verbose</code> sends full parameters and image.</p>
+      <h2>Auto Translation</h2>
+      <p>Enable <code>auto_translate_prompt</code> to translate prompts containing Chinese characters through the configured AstrBot LLM provider. If it does not work, enable debug logging and look for logs beginning with <code>NovelAI auto-translate</code>.</p>
+      <pre>Translate the following NovelAI image prompt tags into concise English tags. Keep existing English tags, weights, brackets, braces, commas, and tag order. Return only the translated prompt, with no explanation:
 {prompt}</pre>
-    <p>&#36825;&#20010;&#40664;&#35748;&#27169;&#26495;&#21487;&#20197;&#20462;&#25913;&#65307;&#21482;&#35201;&#20445;&#30041; <code>{prompt}</code>&#65292;&#25554;&#20214;&#23601;&#33021;&#25226;&#29992;&#25143;&#36755;&#20837;&#25554;&#20837;&#21040;&#27169;&#26495;&#37324;&#12290;</p>
-
-    <h2>&#21644; koishijs/novelai-bot &#30340;&#20851;&#31995;</h2>
-    <p>&#26412;&#25554;&#20214;&#19981;&#26159;&#30452;&#25509;&#20381;&#36182; Koishi &#25554;&#20214;&#65292;&#32780;&#26159;&#21442;&#32771;&#24182;&#31227;&#26893;&#20102;&#23427;&#30340;&#25104;&#29087;&#34892;&#20026;&#65306;&#27169;&#22411;&#21035;&#21517;&#12289;&#26041;&#21521;&#23610;&#23544;&#12289;&#30701;&#21442;&#25968;&#12289;&#40664;&#35748; prompt&#12289;&#37319;&#26679;&#22120;&#36716;&#25442;&#12289;NAI v3/v4 payload&#12289;zip &#22270;&#29255;&#35299;&#26512;&#12289;img2img &#21644; enhance&#12290;</p>
-
-    <h2>&#24403;&#21069;&#33539;&#22260;</h2>
-    <p class="note">&#24403;&#21069;&#25903;&#25345; NovelAI &#23448;&#26041; token &#21518;&#31471;&#12289;text2img&#12289;img2img&#12289;enhance &#21644;&#33258;&#21160;&#32763;&#35793;&#12290;&#26242;&#19981;&#21253;&#21547;&#25209;&#37327;&#29983;&#25104;&#12289;&#33258;&#21160;&#25764;&#22238;&#12289;&#36134;&#21495;&#23494;&#30721;&#30331;&#24405;&#21644;&#31532;&#19977;&#26041;&#21518;&#31471;&#12290;</p>
+      <h2>Options</h2>
+      <table><tbody>
+        <tr><th><code>-r</code></th><td>Resolution: <code>portrait</code>, <code>landscape</code>, <code>square</code>, or <code>1024x1024</code>.</td></tr>
+        <tr><th><code>-m</code></th><td>Model: <code>nai-v3</code>, <code>nai-v4-full</code>, etc.</td></tr>
+        <tr><th><code>-s</code></th><td>Sampler. <code>k_euler_a</code> is converted to <code>k_euler_ancestral</code>.</td></tr>
+        <tr><th><code>-u</code></th><td>Negative prompt.</td></tr>
+        <tr><th><code>-O</code></th><td>Do not append default prompts.</td></tr>
+        <tr><th><code>-T</code></th><td>Skip auto translation once.</td></tr>
+        <tr><th><code>-N</code></th><td>img2img strength.</td></tr>
+        <tr><th><code>-n</code></th><td>img2img noise.</td></tr>
+        <tr><th><code>-e</code></th><td>Enhance mode.</td></tr>
+        <tr><th><code>-i</code></th><td>Iterations.</td></tr>
+        <tr><th><code>-b</code></th><td>Batch size per iteration.</td></tr>
+        <tr><th><code>-o</code></th><td>Output mode: <code>minimal</code>, <code>default</code>, or <code>verbose</code>.</td></tr>
+      </tbody></table>
+      <p class="note">Supported now: official NovelAI token backend, text2img, img2img, enhance, batch generation, and auto translation.</p>
+    </section>
   </main>
+  <script>
+    const zh = document.getElementById("langZh");
+    const en = document.getElementById("langEn");
+    function setLang(lang) {
+      document.body.classList.toggle("lang-en", lang === "en");
+      zh.classList.toggle("active", lang === "zh");
+      en.classList.toggle("active", lang === "en");
+      try { localStorage.setItem("novelai_usage_lang", lang); } catch (_) {}
+    }
+    zh.addEventListener("click", () => setLang("zh"));
+    en.addEventListener("click", () => setLang("en"));
+    try { setLang(localStorage.getItem("novelai_usage_lang") === "en" ? "en" : "zh"); } catch (_) { setLang("zh"); }
+  </script>
 </body>
 </html>

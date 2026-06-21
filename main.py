@@ -93,6 +93,21 @@ MAX_STEPS = 50
 MAX_RESOLUTION = 1920
 OUTPUT_MODES = {"minimal", "default", "verbose"}
 
+
+def as_bool(value: Any) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return value != 0
+    if isinstance(value, str):
+        return value.strip().lower() in {"1", "true", "yes", "on", "enable", "enabled"}
+    return bool(value)
+
+
+def preview_text(text: str, limit: int = 160) -> str:
+    text = " ".join(str(text).split())
+    return text if len(text) <= limit else text[:limit] + "..."
+
 MODEL_MAP = {
     "safe": "safe-diffusion",
     "nai": "nai-diffusion",
@@ -203,10 +218,10 @@ def load_generation_config(config: dict[str, Any] | None) -> GenerationConfig:
         steps=int(config.get("steps", 28)),
         scale=float(config.get("scale", 5.0)),
         cfg_rescale=float(config.get("cfg_rescale", 0.0)),
-        smea=bool(config.get("smea", False)),
-        smea_dyn=bool(config.get("smea_dyn", False)),
-        decrisper=bool(config.get("decrisper", False)),
-        auto_translate_prompt=bool(config.get("auto_translate_prompt", False)),
+        smea=as_bool(config.get("smea", False)),
+        smea_dyn=as_bool(config.get("smea_dyn", False)),
+        decrisper=as_bool(config.get("decrisper", False)),
+        auto_translate_prompt=as_bool(config.get("auto_translate_prompt", False)),
         translation_prompt=str(
             config.get(
                 "translation_prompt",
@@ -400,6 +415,7 @@ async def call_astrbot_llm(context: Context, event: AstrMessageEvent, prompt: st
     for getter_name in ("get_using_provider", "get_provider", "get_llm_provider"):
         getter = getattr(context, getter_name, None)
         if callable(getter):
+            logger.debug("NovelAI auto-translate: trying provider getter %s", getter_name)
             maybe_provider = None
             if getter_name == "get_using_provider":
                 umo = getattr(event, "unified_msg_origin", None)
@@ -417,6 +433,11 @@ async def call_astrbot_llm(context: Context, event: AstrMessageEvent, prompt: st
                 maybe_provider = getter()
             provider = await maybe_provider if hasattr(maybe_provider, "__await__") else maybe_provider
             if provider:
+                logger.debug(
+                    "NovelAI auto-translate: provider selected via %s (%s)",
+                    getter_name,
+                    provider.__class__.__name__,
+                )
                 break
     if provider is None:
         raise NovelAIPluginError("Auto translation is enabled, but no AstrBot LLM provider is available.")
@@ -425,6 +446,7 @@ async def call_astrbot_llm(context: Context, event: AstrMessageEvent, prompt: st
         method = getattr(provider, method_name, None)
         if not callable(method):
             continue
+        logger.debug("NovelAI auto-translate: calling provider.%s", method_name)
         try:
             if method_name == "text_chat":
                 result = method(prompt=prompt, session_id=uuid.uuid4().hex, persist=False)
@@ -436,7 +458,9 @@ async def call_astrbot_llm(context: Context, event: AstrMessageEvent, prompt: st
             except TypeError:
                 continue
         result = await result if hasattr(result, "__await__") else result
-        return extract_llm_text(result)
+        text = extract_llm_text(result)
+        logger.debug("NovelAI auto-translate: raw LLM result preview=%s", preview_text(text))
+        return text
 
     raise NovelAIPluginError("Auto translation is enabled, but this AstrBot provider has no supported text method.")
 
@@ -462,15 +486,33 @@ async def maybe_translate_prompt(
     request: GenerationRequest,
     config: GenerationConfig,
 ) -> GenerationRequest:
-    if not config.auto_translate_prompt or request.no_translator or not contains_cjk(request.prompt):
+    has_cjk = contains_cjk(request.prompt)
+    logger.debug(
+        "NovelAI auto-translate check: enabled=%s no_translator=%s has_cjk=%s prompt=%s",
+        config.auto_translate_prompt,
+        request.no_translator,
+        has_cjk,
+        preview_text(request.prompt),
+    )
+    if not config.auto_translate_prompt:
+        logger.debug("NovelAI auto-translate skipped: config disabled")
+        return request
+    if request.no_translator:
+        logger.debug("NovelAI auto-translate skipped: command used -T/--no-translator")
+        return request
+    if not has_cjk:
+        logger.debug("NovelAI auto-translate skipped: prompt has no CJK characters")
         return request
 
     translate_prompt = config.translation_prompt.replace("{prompt}", request.prompt)
+    logger.info("NovelAI auto-translate: translating prompt via AstrBot LLM")
+    logger.debug("NovelAI auto-translate prompt preview=%s", preview_text(translate_prompt))
     translated = clean_translated_prompt(await call_astrbot_llm(context, event, translate_prompt))
     if not translated:
         raise NovelAIPluginError("Auto translation returned an empty prompt.")
 
-    logger.info("NovelAI prompt was auto-translated by the configured AstrBot LLM provider.")
+    logger.info("NovelAI auto-translate: prompt translated successfully")
+    logger.debug("NovelAI auto-translate result preview=%s", preview_text(translated))
     request.prompt = normalize_prompt(translated)
     return request
 
@@ -631,9 +673,24 @@ class NovelAIClient:
             ),
         }
         payload = build_novelai_payload(request)
+        logger.debug(
+            "NovelAI request payload summary: endpoint=%s model=%s sampler=%s scheduler=%s size=%sx%s steps=%s scale=%s batch=%s img2img=%s enhance=%s",
+            self.config.endpoint,
+            request.model,
+            request.sampler,
+            request.scheduler,
+            request.width,
+            request.height,
+            request.steps,
+            request.scale,
+            request.batch,
+            bool(request.image_base64),
+            request.enhance,
+        )
 
         try:
             async with httpx.AsyncClient(timeout=self.config.timeout_seconds) as client:
+                logger.debug("NovelAI HTTP POST start: %s/ai/generate-image", self.config.endpoint)
                 response = await client.post(
                     f"{self.config.endpoint}/ai/generate-image",
                     headers=headers,
@@ -645,9 +702,23 @@ class NovelAIClient:
             raise NovelAIPluginError(f"NovelAI request failed: {exc.__class__.__name__}") from exc
 
         if response.status_code >= 400:
+            logger.warning(
+                "NovelAI HTTP error: status=%s content_type=%s body_preview=%s",
+                response.status_code,
+                response.headers.get("content-type", ""),
+                preview_text(response.text[:500]),
+            )
             raise NovelAIPluginError(format_novelai_error(response))
 
-        return extract_images_from_zip(response.content)
+        images = extract_images_from_zip(response.content)
+        logger.debug(
+            "NovelAI HTTP success: status=%s zip_bytes=%s image_count=%s first_image_bytes=%s",
+            response.status_code,
+            len(response.content),
+            len(images),
+            len(images[0]) if images else 0,
+        )
+        return images
 
     async def generate_image(self, request: GenerationRequest) -> bytes:
         return (await self.generate_images(request))[0]
@@ -832,6 +903,14 @@ class NovelAIPlugin(Star):
     def __init__(self, context: Context, config: AstrBotConfig | None = None):
         super().__init__(context)
         self.config = load_generation_config(dict(config or {}))
+        logger.info(
+            "NovelAI plugin loaded: endpoint=%s model=%s sampler=%s auto_translate=%s output=%s",
+            self.config.endpoint,
+            self.config.model,
+            self.config.sampler,
+            self.config.auto_translate_prompt,
+            self.config.output_mode,
+        )
 
     @filter.command("nai")
     async def nai(self, event: AstrMessageEvent):
@@ -864,14 +943,34 @@ class NovelAIPlugin(Star):
     async def _handle_draw(self, event: AstrMessageEvent, raw_args: str):
         image_path = ""
         try:
+            logger.debug("NovelAI command received: raw_args=%s", preview_text(raw_args))
             if is_help_args(raw_args):
+                logger.debug("NovelAI command handled as help")
                 yield event.plain_result(get_help_text())
                 return
             request = parse_generation_request(raw_args, self.config)
+            logger.debug(
+                "NovelAI command parsed: prompt=%s negative=%s model=%s sampler=%s output=%s iterations=%s batch=%s",
+                preview_text(request.prompt),
+                preview_text(request.negative_prompt),
+                request.model,
+                request.sampler,
+                request.output_mode,
+                request.iterations,
+                request.batch,
+            )
             request = await maybe_translate_prompt(self.context, event, request, self.config)
             input_image_path = await get_event_image_path(event)
             if input_image_path:
+                logger.debug("NovelAI input image detected: %s", input_image_path)
                 prepare_input_image(input_image_path, request, self.config)
+                logger.debug(
+                    "NovelAI input image prepared: size=%sx%s strength=%s noise=%s",
+                    request.width,
+                    request.height,
+                    request.strength,
+                    request.noise,
+                )
             elif request.enhance:
                 raise NovelAIPluginError("Enhance mode requires one image in the message.")
             client = NovelAIClient(self.config)
@@ -885,7 +984,8 @@ class NovelAIPlugin(Star):
             )
             total_images = request.iterations * request.batch
             image_number = 1
-            for _ in range(request.iterations):
+            for iteration in range(1, request.iterations + 1):
+                logger.debug("NovelAI generation iteration %s/%s seed=%s", iteration, request.iterations, request.seed)
                 image_bytes_list = await client.generate_images(request)
                 for image_bytes in image_bytes_list:
                     image_path = await write_temp_image(image_bytes)
