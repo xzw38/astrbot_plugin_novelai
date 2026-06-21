@@ -48,6 +48,7 @@ from main import (
     format_output_text,
     format_novelai_error,
     load_generation_config,
+    maybe_translate_prompt,
     parse_generation_request,
     resize_input_size,
     strip_nai_command,
@@ -177,6 +178,36 @@ class NovelAIPluginTests(unittest.TestCase):
         self.assertEqual(calls["umo"], "aiocqhttp:group:123")
         self.assertEqual(calls["kwargs"]["prompt"], "translate")
         self.assertFalse(calls["kwargs"]["persist"])
+
+    def test_maybe_translate_prompt_marks_translated_prompt(self):
+        class Provider:
+            async def text_chat(self, **kwargs):
+                return types.SimpleNamespace(completion_text="1girl, cat ears")
+
+        class Context:
+            def get_using_provider(self, umo=None):
+                return Provider()
+
+        event = types.SimpleNamespace(unified_msg_origin="aiocqhttp:group:123")
+        request = parse_generation_request("一个女孩, 猫耳 -o verbose", GenerationConfig())
+
+        result = run_async(
+            maybe_translate_prompt(
+                Context(),
+                event,
+                request,
+                GenerationConfig(auto_translate_prompt=True),
+            )
+        )
+
+        self.assertTrue(result.translated_prompt)
+        self.assertIn("一个女孩", result.original_prompt)
+        self.assertEqual(result.prompt, "1girl, cat ears")
+
+        output = format_output_text(result, 1, 1)
+        self.assertIn("translated = yes", output)
+        self.assertIn("original prompt =", output)
+        self.assertIn("prompt = 1girl, cat ears", output)
 
     def test_extract_first_png_from_zip(self):
         image_bytes = b"\x89PNG\r\n\x1a\nfake"

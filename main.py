@@ -203,6 +203,8 @@ class GenerationRequest:
     iterations: int = 1
     batch: int = 1
     output_mode: str = "default"
+    translated_prompt: bool = False
+    original_prompt: str | None = None
 
 
 def load_generation_config(config: dict[str, Any] | None) -> GenerationConfig:
@@ -513,6 +515,8 @@ async def maybe_translate_prompt(
 
     logger.info("NovelAI auto-translate: prompt translated successfully")
     logger.debug("NovelAI auto-translate result preview=%s", preview_text(translated))
+    request.original_prompt = request.prompt
+    request.translated_prompt = True
     request.prompt = normalize_prompt(translated)
     return request
 
@@ -850,6 +854,10 @@ def format_output_text(request: GenerationRequest, image_index: int, total_image
         if request.image_base64:
             lines.append(f"strength = {request.strength}")
             lines.append(f"noise = {request.noise}")
+        if request.translated_prompt:
+            lines.append("translated = yes")
+            if request.original_prompt:
+                lines.append(f"original prompt = {request.original_prompt}")
         lines.append(f"prompt = {request.prompt}")
         lines.append(f"negative = {request.negative_prompt}")
     return "\n".join(lines)
@@ -960,6 +968,11 @@ class NovelAIPlugin(Star):
                 request.batch,
             )
             request = await maybe_translate_prompt(self.context, event, request, self.config)
+            logger.debug(
+                "NovelAI prompt ready: translated=%s final_prompt=%s",
+                request.translated_prompt,
+                preview_text(request.prompt),
+            )
             input_image_path = await get_event_image_path(event)
             if input_image_path:
                 logger.debug("NovelAI input image detected: %s", input_image_path)
