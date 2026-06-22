@@ -3,7 +3,7 @@
     "display_name": "NovelAI 图片生成",
     "desc": "通过 NovelAI API 为 AstrBot 提供画图、改图、增强、批量生成和自动翻译能力。",
     "short_desc": "NovelAI 画图插件。",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "author": "xzw38",
     "repo": "https://github.com/xzw38/astrbot_plugin_novelai",
     "tags": [
